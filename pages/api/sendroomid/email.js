@@ -68,7 +68,7 @@ export default async function handler(req, res) {
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
-      const url = `https://student-cover-q6ds0kkl6-vaibhav17s-projects.vercel.app//call/${token}`;
+      const url = `https://student-cover.vercel.app//call/${token}`;
 
       // const url = `http://localhost:3000/call/${token}`;
       ans = url;

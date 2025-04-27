@@ -1,5 +1,4 @@
-const BASE_URL =
-  "https://student-cover-q6ds0kkl6-vaibhav17s-projects.vercel.app/";
+const BASE_URL = "https://student-cover.vercel.app/";
 
 // const BASE_URL = 'http://localhost:3000'
 

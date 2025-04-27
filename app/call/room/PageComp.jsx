@@ -180,8 +180,7 @@ function PageComp() {
 
       await socket.emit("room:call:end", { roomCreator, room: room });
 
-      window.location.href =
-        "https://student-cover-q6ds0kkl6-vaibhav17s-projects.vercel.app//";
+      window.location.href = "https://student-cover.vercel.app//";
       // setcallend(true);
       // router.push("/call/room/feedback");
     }

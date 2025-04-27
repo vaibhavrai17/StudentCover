@@ -40,8 +40,7 @@ export function submitRating(userId, expertEmail, feedback, rating) {
       //   throw new Error(response.data.message)
       // }
       // route.push("/");
-      window.location.href =
-        "https://student-cover-q6ds0kkl6-vaibhav17s-projects.vercel.app//";
+      window.location.href = "https://student-cover.vercel.app//";
     } catch (err) {
       console.log(err);
     }
