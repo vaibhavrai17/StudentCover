@@ -27,7 +27,7 @@ const Page = () => {
       const url = `/call/${tokken}`;
       localStorage.setItem("redirectPath", url);
       window.location.href =
-        "https://student-cover-48w8cj1mc-vaibhav17s-projects.vercel.app/login/expertlogin";
+        "https://student-cover-q6ds0kkl6-vaibhav17s-projects.vercel.app//login/expertlogin";
     }
   }, [tokken]);
 
@@ -96,7 +96,7 @@ const Page = () => {
             Gear up for the next one.
           </p>
           <a
-            href="https://student-cover-48w8cj1mc-vaibhav17s-projects.vercel.app/"
+            href="https://student-cover-q6ds0kkl6-vaibhav17s-projects.vercel.app//"
             className=" text-center mt-5  bg-red-500 hover:bg-red-700 text-xl font-semibold px-4 py-2 rounded-xl text-white"
           >
             Go Home

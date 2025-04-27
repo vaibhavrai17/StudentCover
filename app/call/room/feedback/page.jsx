@@ -99,7 +99,7 @@ const RatingForm = () => {
         <div className=" px-10 shadow-2xl flex flex-col justify-center  bg-black border-2 border-red-800 rounded-2xl">
           <div className="w-full h-10 flex py-4 flex-row-reverse">
             <a
-              href="https://student-cover-48w8cj1mc-vaibhav17s-projects.vercel.app/"
+              href="https://student-cover-q6ds0kkl6-vaibhav17s-projects.vercel.app//"
               className=" text-3xl text-white"
             >
               <RxCross2 />
@@ -180,7 +180,7 @@ const RatingForm = () => {
             your dedication and knowledge are truly appreciated.
           </p>
           <a
-            href="https://student-cover-48w8cj1mc-vaibhav17s-projects.vercel.app/"
+            href="https://student-cover-q6ds0kkl6-vaibhav17s-projects.vercel.app//"
             className=" text-center mt-5  bg-red-500 hover:bg-red-700 text-xl font-semibold px-4 py-2 rounded-xl text-white"
           >
             Go Home

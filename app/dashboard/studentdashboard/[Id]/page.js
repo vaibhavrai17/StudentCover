@@ -53,7 +53,7 @@ function Sidebar({ params }) {
 
   const handelHome = async () => {
     window.location.href =
-      "https://student-cover-48w8cj1mc-vaibhav17s-projects.vercel.app/";
+      "https://student-cover-q6ds0kkl6-vaibhav17s-projects.vercel.app//";
   };
 
   return (
