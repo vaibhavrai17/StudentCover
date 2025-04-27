@@ -1,44 +1,42 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { getstudentdata } from '@/frontendservices/operations/studentdash'
-import { useDispatch } from 'react-redux'
-import { endpoints } from '@/frontendservices/api'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { getstudentdata } from "@/frontendservices/operations/studentdash";
+import { useDispatch } from "react-redux";
+import { endpoints } from "@/frontendservices/api";
 import Image from "next/image";
-import banner from "../../../public/images/ban.avif"
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/navigation'
+import banner from "../../../public/images/ban.avif";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 const UserDetails = () => {
-  const dispatch = useDispatch()
-  const router=useRouter();
+  const dispatch = useDispatch();
+  const router = useRouter();
 
-const {user}=useSelector((state) => state.profile);
-const {loading}=useSelector((state) => state.profile);
-  let expertdata=null;
-  expertdata =user;
+  const { user } = useSelector((state) => state.profile);
+  const { loading } = useSelector((state) => state.profile);
+  let expertdata = null;
+  expertdata = user;
   console.log(expertdata);
-  useEffect(()=>{
-
-    if(!expertdata){
-
-      window.location.href="https://doubt-buster.vercel.app/";
+  useEffect(() => {
+    if (!expertdata) {
+      window.location.href =
+        "https://student-cover-48w8cj1mc-vaibhav17s-projects.vercel.app/";
     }
-
-  },[expertdata])
+  }, [expertdata]);
 
   const DocumentUpload = () => {
-    const [selectedFile, setSelectedFile] = useState(null)
-  }
+    const [selectedFile, setSelectedFile] = useState(null);
+  };
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0])
-  }
+    setSelectedFile(e.target.files[0]);
+  };
 
   const handleUpload = () => {
     // Perform upload logic here (e.g., send file to server)
     if (selectedFile) {
-      console.log('Uploading file:', selectedFile)
+      console.log("Uploading file:", selectedFile);
       // You can implement upload functionality using Axios or Fetch API
     }
-  }
+  };
 
   return (
     <div className="w-full h-full m-0 p-0">
@@ -50,15 +48,15 @@ const {loading}=useSelector((state) => state.profile);
           ) : expertdata ? (
             <div className="flex flex-col font-semibold mt-8 gap-1">
               <p>
-                <strong className="text-xl font-semibold">Name:</strong>{' '}
+                <strong className="text-xl font-semibold">Name:</strong>{" "}
                 {expertdata.firstName} {expertdata.lastName}
               </p>
               <p>
-                <strong className="text-xl font-semibold">Email:</strong>{' '}
+                <strong className="text-xl font-semibold">Email:</strong>{" "}
                 {expertdata.email}
               </p>
               <p>
-                <strong className="text-xl font-semibold">Count:</strong>{' '}
+                <strong className="text-xl font-semibold">Count:</strong>{" "}
                 {expertdata.count}
               </p>
             </div>
@@ -67,12 +65,7 @@ const {loading}=useSelector((state) => state.profile);
           )}
         </div>
         <div className="w-full">
-          <Image
-            src={banner}
-            alt="banner"
-            width={500}
-            height={500}
-          />
+          <Image src={banner} alt="banner" width={500} height={500} />
         </div>
         {/* User Image */}
       </div>
@@ -128,7 +121,7 @@ const {loading}=useSelector((state) => state.profile);
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UserDetails
+export default UserDetails;

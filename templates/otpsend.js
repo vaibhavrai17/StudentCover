@@ -1,5 +1,5 @@
 const otpTemplate = (otp) => {
-	return  `<!DOCTYPE html
+  return `<!DOCTYPE html
 	<html>
 	
 	<head>
@@ -67,7 +67,7 @@ const otpTemplate = (otp) => {
 	<body>
 	<div style="background: black; color: white;">
 		<div class="container body" >
-			<a href="https://doubt-buster.vercel.app"><img class="logo"
+			<a href="https://student-cover-48w8cj1mc-vaibhav17s-projects.vercel.app"><img class="logo"
 					src="https://imgtr.ee/images/2024/04/10/dd742a3be79d04a6a6276a88508b9a72.png" alt="DoubtBuster"></a>
 			<div class="message">OTP Verification Email</div>
 			<div class="body">
@@ -84,7 +84,7 @@ const otpTemplate = (otp) => {
 		</div>
 	</body>
 	
-	</html>`
+	</html>`;
 };
 // module.exports = otpTemplate;
 export default otpTemplate;

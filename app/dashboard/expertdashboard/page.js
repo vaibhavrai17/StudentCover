@@ -1,68 +1,68 @@
 // pages/components/Sidebar.js
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import { LayoutDashboard, Menu, UserCircle } from 'lucide-react'
-import LOGO from '../../../public/images/whitelogo.png'
-import { HiHome } from 'react-icons/hi2'
-import { VscPreview } from 'react-icons/vsc'
-import { GiBroadDagger } from 'react-icons/gi'
-import { IoLogOut } from 'react-icons/io5'
-import Image from 'next/image'
-import Ask from './allskills'
-import Reviews from './reviews'
-import Profile from './profile'
-import Addskill from './addskills'
-import axios from 'axios'
-import { useRouter } from 'next/navigation'
-import { useSelector } from 'react-redux'
-import { toast, ToastContainer } from 'react-toastify'
-import { useDispatch } from 'react-redux'
-import { logout } from '@/frontendservices/operations/autoapi'
+import React, { useState } from "react";
+import { LayoutDashboard, Menu, UserCircle } from "lucide-react";
+import LOGO from "../../../public/images/whitelogo.png";
+import { HiHome } from "react-icons/hi2";
+import { VscPreview } from "react-icons/vsc";
+import { GiBroadDagger } from "react-icons/gi";
+import { IoLogOut } from "react-icons/io5";
+import Image from "next/image";
+import Ask from "./allskills";
+import Reviews from "./reviews";
+import Profile from "./profile";
+import Addskill from "./addskills";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { logout } from "@/frontendservices/operations/autoapi";
 import { FaFreeCodeCamp } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 
 function Page() {
-  const { loading } = useSelector((state) => state.auth)
-  const [expanded, setExpanded] = useState(true)
-  const [tab, setTab] = useState('profile')
-  const router = useRouter()
-  const dispatch = useDispatch()
+  const { loading } = useSelector((state) => state.auth);
+  const [expanded, setExpanded] = useState(true);
+  const [tab, setTab] = useState("profile");
+  const router = useRouter();
+  const dispatch = useDispatch();
   const handelChange = async (choice) => {
-    setTab(choice)
-  }
-  let email="hdfhj";
-  console.log(loading, 'logding dikhao')
+    setTab(choice);
+  };
+  let email = "hdfhj";
+  console.log(loading, "logding dikhao");
   const handleLogout = async () => {
     try {
       // Make a request to the logout route
       // const response = await axios.get('/api/auth/expert/logout')
       // console.log(response)
       // if (response.data.success) {
-        dispatch(logout(email))
-        router.push('/')
-        // toast.success('Logged Out')
-        // router.push('/')
-        // If logout was successful, reset the state or perform any necessary actions
-        // For example, redirect to the login page or clear user data
-        console.log('Logout successful')
-        // Perform additional actions like redirecting the user or clearing the session
-      
+      dispatch(logout(email));
+      router.push("/");
+      // toast.success('Logged Out')
+      // router.push('/')
+      // If logout was successful, reset the state or perform any necessary actions
+      // For example, redirect to the login page or clear user data
+      console.log("Logout successful");
+      // Perform additional actions like redirecting the user or clearing the session
     } catch (error) {
-      console.error('Logout failed', error)
+      console.error("Logout failed", error);
       // Handle logout failure, maybe show an error message to the user
     }
-  }
+  };
 
   const handelHome = async () => {
-    window.location.href = "https://doubt-buster.vercel.app/";
-  }
+    window.location.href =
+      "https://student-cover-48w8cj1mc-vaibhav17s-projects.vercel.app/";
+  };
 
   return (
     <div className="flex h-screen ml-[17%]">
       <div
         className={` bg-gradient-to-b from-slate-900 to-gray-700 border-r  fixed top-0 left-0 text-white h-full  ${
-          expanded ? 'w-1/6' : 'w-20'
+          expanded ? "w-1/6" : "w-20"
         }`}
       >
         <div className="flex items-center pt-6 pl-2">
@@ -70,7 +70,7 @@ function Page() {
             alt=""
             src={LOGO}
             className={`overflow-hidden transition-all ${
-              expanded ? 'w-36 pl-2 mr-4' : 'w-0 mr-0'
+              expanded ? "w-36 pl-2 mr-4" : "w-0 mr-0"
             }`}
           />
           <button
@@ -90,9 +90,9 @@ function Page() {
                 <CgProfile size={20} />
               </div>
               <button
-                onClick={() => handelChange('profile')}
+                onClick={() => handelChange("profile")}
                 className={`overflow-hidden transition-all   font-sans ${
-                  expanded ? 'w-52 text-start ml-4' : 'w-0'
+                  expanded ? "w-52 text-start ml-4" : "w-0"
                 }`}
               >
                 Profile
@@ -107,9 +107,9 @@ function Page() {
                 <FaFreeCodeCamp size={20} />
               </div>
               <button
-                onClick={() => handelChange('ask')}
+                onClick={() => handelChange("ask")}
                 className={`overflow-hidden transition-all ${
-                  expanded ? 'w-52 text-start ml-4' : 'w-0'
+                  expanded ? "w-52 text-start ml-4" : "w-0"
                 }`}
               >
                 All skills
@@ -124,9 +124,9 @@ function Page() {
                 <VscPreview size={20} />
               </div>
               <button
-                onClick={() => handelChange('review')}
+                onClick={() => handelChange("review")}
                 className={`overflow-hidden transition-all ${
-                  expanded ? 'w-52 text-start ml-4' : 'w-0'
+                  expanded ? "w-52 text-start ml-4" : "w-0"
                 }`}
               >
                 Reviews
@@ -140,9 +140,9 @@ function Page() {
                 <GiBroadDagger size={20} />
               </div>
               <button
-                onClick={() => handelChange('addskills')}
+                onClick={() => handelChange("addskills")}
                 className={`overflow-hidden transition-all ${
-                  expanded ? 'w-52 text-start ml-4' : 'w-0'
+                  expanded ? "w-52 text-start ml-4" : "w-0"
                 }`}
               >
                 add skills
@@ -158,28 +158,27 @@ function Page() {
               <button
                 onClick={handleLogout} // Call handleLogout function on button click
                 className={`overflow-hidden ${
-                  expanded ? 'w-52 text-start ml-4' : 'w-0'
+                  expanded ? "w-52 text-start ml-4" : "w-0"
                 }`}
               >
                 Logout
               </button>
             </div>
-           
           </div>
         }
       </div>
 
-      {tab === 'profile' ? (
+      {tab === "profile" ? (
         <Profile />
-      ) : tab === 'ask' ? (
+      ) : tab === "ask" ? (
         <Ask />
-      ) : tab === 'addskills' ? (
+      ) : tab === "addskills" ? (
         <Addskill />
       ) : (
         <Reviews />
       )}
     </div>
-  )
+  );
 }
 
-export default Page
+export default Page;

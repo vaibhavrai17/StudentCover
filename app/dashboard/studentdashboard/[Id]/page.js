@@ -1,35 +1,34 @@
 // pages/components/Sidebar.js
-'use client'
-import React, { useState } from 'react'
-import { LayoutDashboard, Menu, UserCircle } from 'lucide-react'
-import LOGO from '../../../../public/images/whitelogo.png'
-import Image from 'next/image'
-import Ask from './ask'
-import Reviews from './reviews'
-import { useRouter } from 'next/navigation'
-import Profile from './profile'
-import { useDispatch } from 'react-redux'
-import axios from 'axios' // Import axios for making HTTP requests
-import { logout } from '@/frontendservices/operations/autoapi'
-import { toast } from 'react-toastify'
-import { HiHome } from 'react-icons/hi2'
-import { IoLogOut } from 'react-icons/io5'
+"use client";
+import React, { useState } from "react";
+import { LayoutDashboard, Menu, UserCircle } from "lucide-react";
+import LOGO from "../../../../public/images/whitelogo.png";
+import Image from "next/image";
+import Ask from "./ask";
+import Reviews from "./reviews";
+import { useRouter } from "next/navigation";
+import Profile from "./profile";
+import { useDispatch } from "react-redux";
+import axios from "axios"; // Import axios for making HTTP requests
+import { logout } from "@/frontendservices/operations/autoapi";
+import { toast } from "react-toastify";
+import { HiHome } from "react-icons/hi2";
+import { IoLogOut } from "react-icons/io5";
 import { FaRegQuestionCircle } from "react-icons/fa";
-import { logouts } from '@/frontendservices/operations/autoapi'
+import { logouts } from "@/frontendservices/operations/autoapi";
 import { CgProfile } from "react-icons/cg";
-
 
 // import { useRouter } from 'next/navigation'
 
 function Sidebar({ params }) {
-  const [expanded, setExpanded] = useState(true)
-  const [tab, setTab] = useState('profile')
-  const dispatch = useDispatch()
+  const [expanded, setExpanded] = useState(true);
+  const [tab, setTab] = useState("profile");
+  const dispatch = useDispatch();
 
-  const router = useRouter()
+  const router = useRouter();
 
-  console.log('User Id: ', params.Id)
-  let email="ujfdfj"
+  console.log("User Id: ", params.Id);
+  let email = "ujfdfj";
 
   const handleLogout = async () => {
     try {
@@ -37,38 +36,39 @@ function Sidebar({ params }) {
       // const response = await axios.get('/api/auth/user/logout')
       // console.log(response)
       // if (response.data.success) {
-        dispatch(logouts(email))
-        router.push('/')
-        // toast.success('Logged Out')
-        console.log('Logout successful')
+      dispatch(logouts(email));
+      router.push("/");
+      // toast.success('Logged Out')
+      console.log("Logout successful");
       // }
     } catch (error) {
-      console.error('Logout failed', error)
+      console.error("Logout failed", error);
       // Handle logout failure, maybe show an error message to the user
     }
-  }
+  };
 
   const handleChange = (choice) => {
-    setTab(choice)
-  }
+    setTab(choice);
+  };
 
   const handelHome = async () => {
-    window.location.href = "https://doubt-buster.vercel.app/";
-  }
+    window.location.href =
+      "https://student-cover-48w8cj1mc-vaibhav17s-projects.vercel.app/";
+  };
 
   return (
     <div className="flex h-screen">
       <div
         className={`bg-gradient-to-b from-slate-900 to-gray-700 border-r text-white h-full  ${
-          expanded ? 'w-1/6' : 'w-20'
+          expanded ? "w-1/6" : "w-20"
         }`}
       >
         <div className="flex items-center pt-6 pl-2">
           <Image
-            alt=''
+            alt=""
             src={LOGO}
             className={`overflow-hidden transition-all ${
-              expanded ? 'w-36 pl-2 mr-4' : 'w-0 mr-0'
+              expanded ? "w-36 pl-2 mr-4" : "w-0 mr-0"
             }`}
           />
           <button
@@ -88,9 +88,9 @@ function Sidebar({ params }) {
                 <CgProfile size={20} />
               </div>
               <button
-                onClick={() => handleChange('profile')}
+                onClick={() => handleChange("profile")}
                 className={`overflow-hidden transition-all ${
-                  expanded ? 'w-52 text-start ml-4' : 'w-0'
+                  expanded ? "w-52 text-start ml-4" : "w-0"
                 }`}
               >
                 Profile
@@ -105,9 +105,9 @@ function Sidebar({ params }) {
                 <FaRegQuestionCircle size={20} />
               </div>
               <button
-                onClick={() => handleChange('ask')}
+                onClick={() => handleChange("ask")}
                 className={`overflow-hidden transition-all ${
-                  expanded ? 'w-52 text-start ml-4' : 'w-0'
+                  expanded ? "w-52 text-start ml-4" : "w-0"
                 }`}
               >
                 Ask Doubts
@@ -123,21 +123,19 @@ function Sidebar({ params }) {
               <button
                 onClick={handleLogout} // Call handleLogout function on button click
                 className={`overflow-hidden ${
-                  expanded ? 'w-52 text-start ml-4' : 'w-0'
+                  expanded ? "w-52 text-start ml-4" : "w-0"
                 }`}
               >
                 Logout
               </button>
-              
             </div>
-           
           </div>
         }
       </div>
 
-      {tab === 'profile' ? <Profile /> : tab === 'ask' ? <Ask /> : <Reviews />}
+      {tab === "profile" ? <Profile /> : tab === "ask" ? <Ask /> : <Reviews />}
     </div>
-  )
+  );
 }
 
-export default Sidebar
+export default Sidebar;

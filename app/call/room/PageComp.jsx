@@ -6,7 +6,7 @@ import peer from "../../../services/peer";
 import { useSocket } from "../../../context/SocketProvider";
 import { SocketContext } from "../../../context/SocketProvider";
 import { useContext } from "react";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 import { LuPhoneCall } from "react-icons/lu";
 import { SlCallEnd } from "react-icons/sl";
 import { HiOutlineVideoCamera } from "react-icons/hi2";
@@ -36,10 +36,10 @@ function PageComp() {
   const [roomCreator, setRoomCreator] = useState();
   const [calldone, setCalldone] = useState(false);
   const [start, setStart] = useState(false);
-  const {room, setremoteEmail} = useContext(SocketContext);
+  const { room, setremoteEmail } = useContext(SocketContext);
   const router = useRouter();
-  const [callend,setcallend] = useState(false);
-  const [vedio, setvedio] = useState(false); 
+  const [callend, setcallend] = useState(false);
+  const [vedio, setvedio] = useState(false);
   const [audio, setaudio] = useState(true);
   const [remotevedio, setremotevedio] = useState(false);
   const [remoteaudio, setremoteaudio] = useState(true);
@@ -57,11 +57,14 @@ function PageComp() {
     }
   };
 
-  const handleUserJoined = useCallback(({ email, id }) => {
-    console.log(`Email ${email} joined room`);
-    setremoteEmail(email);
-    setRemoteSocketId(id);
-  }, [setremoteEmail]);
+  const handleUserJoined = useCallback(
+    ({ email, id }) => {
+      console.log(`Email ${email} joined room`);
+      setremoteEmail(email);
+      setRemoteSocketId(id);
+    },
+    [setremoteEmail]
+  );
 
   const handleCallUser = useCallback(async () => {
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -133,13 +136,13 @@ function PageComp() {
     console.log(message);
   }, []);
 
-  const handleCreator = useCallback(async ({creatorId})=> {
+  const handleCreator = useCallback(async ({ creatorId }) => {
     setRoomCreator(creatorId);
-    console.log("room creator id: ",creatorId);
-  },[])
+    console.log("room creator id: ", creatorId);
+  }, []);
 
   useEffect(() => {
-      peer.peer.addEventListener("track", async (ev) => {
+    peer.peer.addEventListener("track", async (ev) => {
       const remoteStream = ev.streams;
       console.log("GOT TRACKS!!");
       console.log(remoteStream);
@@ -150,7 +153,7 @@ function PageComp() {
   const handlecallend = useCallback(async () => {
     if (!callend) {
       myStream.getTracks().forEach((track) => track.stop());
-  
+
       setRemoteSocketId(null);
       setMyStream(null);
       setRemoteStream(null);
@@ -167,7 +170,7 @@ function PageComp() {
   const handlecallexit = useCallback(async () => {
     if (remoteSocketId == null) {
       // myStream.getTracks().forEach((track) => track.stop());
-  
+
       // setRemoteSocketId(null);
       // setMyStream(null);
       // setRemoteStream(null);
@@ -177,10 +180,10 @@ function PageComp() {
 
       await socket.emit("room:call:end", { roomCreator, room: room });
 
-      window.location.href = 'https://doubt-buster.vercel.app/';
+      window.location.href =
+        "https://student-cover-48w8cj1mc-vaibhav17s-projects.vercel.app/";
       // setcallend(true);
       // router.push("/call/room/feedback");
-      
     }
   }, [roomCreator, room, remoteSocketId]);
 
@@ -196,26 +199,26 @@ function PageComp() {
     setaudio(!audio);
   }, [audio, room, socket]);
 
-  const handelremotevedio = useCallback(async({status}) => {
-    console.log("remote vedio status: ",!status);
+  const handelremotevedio = useCallback(async ({ status }) => {
+    console.log("remote vedio status: ", !status);
     setremotevedio(status);
-  },[]);
+  }, []);
 
-  const handelremoteaudio = useCallback(async({status}) => {
-    console.log("remote audio status: ",!status);
+  const handelremoteaudio = useCallback(async ({ status }) => {
+    console.log("remote audio status: ", !status);
     setremoteaudio(status);
-  },[]);
+  }, []);
 
   const handleScreenShareOn = useCallback(async () => {
     const screenStream = await navigator.mediaDevices.getDisplayMedia({
       video: true,
     });
-  
+
     setOwnScreen(screenStream);
-  
+
     const videoTrack = myStream.getVideoTracks()[0];
     const sender = peer.peer.getSenders().find((s) => s.track === videoTrack);
-  
+
     if (sender) {
       sender.replaceTrack(screenStream.getVideoTracks()[0]);
       socket.emit("screenshare:status", { status: true, room });
@@ -230,46 +233,55 @@ function PageComp() {
 
   const handleScreenShareOff = useCallback(async () => {
     if (youPresent) {
-        console.log("Calling screen share off");
+      console.log("Calling screen share off");
 
-        const videoTracks = myStream?.getVideoTracks();
-        const videoTrack = videoTracks && videoTracks.length > 0 ? videoTracks[0] : null;
+      const videoTracks = myStream?.getVideoTracks();
+      const videoTrack =
+        videoTracks && videoTracks.length > 0 ? videoTracks[0] : null;
 
-        console.log("Video track:", videoTrack);
+      console.log("Video track:", videoTrack);
 
-        const senders = peer.peer.getSenders();
-        console.log("Senders:", senders);
+      const senders = peer.peer.getSenders();
+      console.log("Senders:", senders);
 
-        if (videoTrack) {
-            const sender = senders[1];
+      if (videoTrack) {
+        const sender = senders[1];
 
-            console.log("Sender:", senders[1]);
+        console.log("Sender:", senders[1]);
 
-            if (senders[1]) {
+        if (senders[1]) {
+          const screenShareTrack = senders[1].track;
+          screenShareTrack.stop();
 
-                const screenShareTrack = senders[1].track;
-                screenShareTrack.stop();
+          sender.replaceTrack(videoTrack);
 
-                sender.replaceTrack(videoTrack);
-
-                socket.emit("screenshare:status", { status: false, room });
-                setcode(false);
-                setboard(false);
-                setScreenshare(false);
-                setYouPresent(false);
-            } else {
-                console.error("Sender not found");
-            }
+          socket.emit("screenshare:status", { status: false, room });
+          setcode(false);
+          setboard(false);
+          setScreenshare(false);
+          setYouPresent(false);
         } else {
-            console.error("Video track not found in myStream");
+          console.error("Sender not found");
         }
+      } else {
+        console.error("Video track not found in myStream");
+      }
     } else if (screenshare) {
-        alert("You are not presenting");
+      alert("You are not presenting");
     }
-}, [myStream, room, screenshare, setcode, setboard, setScreenshare, setYouPresent, socket, youPresent]);
+  }, [
+    myStream,
+    room,
+    screenshare,
+    setcode,
+    setboard,
+    setScreenshare,
+    setYouPresent,
+    socket,
+    youPresent,
+  ]);
 
   useEffect(() => {
-
     socket.on("screenshare:status", (data) => {
       const { status } = data;
       if (status) {
@@ -279,63 +291,64 @@ function PageComp() {
       }
     });
 
-    return () => {
-    };
-  }, [
-    handleScreenShareOn,
-    handleScreenShareOff,
-    socket
-  ]);
+    return () => {};
+  }, [handleScreenShareOn, handleScreenShareOff, socket]);
 
-  const handelRemoteScreenShare = useCallback(async({status}) => {
-    if(!status){
-      await handleScreenShareOff();
-    }
-    setcode(false);
-    setboard(false);
-    setScreenshare(status);
-  },[handleScreenShareOff]);
+  const handelRemoteScreenShare = useCallback(
+    async ({ status }) => {
+      if (!status) {
+        await handleScreenShareOff();
+      }
+      setcode(false);
+      setboard(false);
+      setScreenshare(status);
+    },
+    [handleScreenShareOff]
+  );
 
-  const handlewhiteboardOn = useCallback(async() => {
+  const handlewhiteboardOn = useCallback(async () => {
     setScreenshare(false);
     setcode(false);
-    socket.emit("whiteboard:status", {status: true, room});
+    socket.emit("whiteboard:status", { status: true, room });
     setboard(true);
-  },[room, socket]);
+  }, [room, socket]);
 
-  const handlewhiteboardOff = useCallback(async() => {
-    socket.emit("whiteboard:status", {status: false, room});
+  const handlewhiteboardOff = useCallback(async () => {
+    socket.emit("whiteboard:status", { status: false, room });
     setScreenshare(false);
     setcode(false);
     setboard(false);
-  },[room, socket]);
+  }, [room, socket]);
 
-  const handleRemoteWhiteboard = useCallback(async({status}) => {
+  const handleRemoteWhiteboard = useCallback(async ({ status }) => {
     setcode(false);
     setScreenshare(false);
     setboard(status);
-  },[]);
+  }, []);
 
-  const handlecodeeditorOn = useCallback(async() => {
+  const handlecodeeditorOn = useCallback(async () => {
     setScreenshare(false);
     setboard(false);
-    socket.emit("codeeditor:status", {status: true, room});
+    socket.emit("codeeditor:status", { status: true, room });
     setcode(true);
-  },[room, socket]);
+  }, [room, socket]);
 
-  const handlecodeeditorOff = useCallback(async() => {
+  const handlecodeeditorOff = useCallback(async () => {
     setScreenshare(false);
-    socket.emit("codeeditor:status", {status: false, room});
+    socket.emit("codeeditor:status", { status: false, room });
     setboard(false);
     setcode(false);
-  },[room, socket]);
+  }, [room, socket]);
 
-  const handleRemotecodeeditor = useCallback(async({status}) => {
-    handleScreenShareOff();
-    setScreenshare(false);
-    setboard(false);
-    setcode(status);
-  },[handleScreenShareOff]);
+  const handleRemotecodeeditor = useCallback(
+    async ({ status }) => {
+      handleScreenShareOff();
+      setScreenshare(false);
+      setboard(false);
+      setcode(status);
+    },
+    [handleScreenShareOff]
+  );
 
   useEffect(() => {
     socket.on("remotecodeeditor:status", handleRemotecodeeditor);
@@ -382,166 +395,252 @@ function PageComp() {
     handelRemoteScreenShare,
     handleRemoteWhiteboard,
     handleRemotecodeeditor,
-    handlecallend
+    handlecallend,
   ]);
 
   return (
     <div className=" p-5 flex flex-col overflow-hidden  items-center h-screen w-screen bg-slate-700">
       <div className=" flex w-full h-[87%] bg-white overflow-hidden">
-      <div className=" w-[78%] h-full flex justify-center items-center overflow-hidden bg-gray-600">
+        <div className=" w-[78%] h-full flex justify-center items-center overflow-hidden bg-gray-600">
+          <div className=" absolute z-30 scale-[180%]">
+            {youPresent
+              ? ownScreen && (
+                  <ReactPlayer playing={true} muted={true} url={ownScreen} />
+                )
+              : screenshare &&
+                remoteStream && (
+                  <ReactPlayer playing={true} muted={true} url={remoteStream} />
+                )}
+          </div>
 
-      <div className=" absolute z-30 scale-[180%]">
-      { youPresent ? 
-            (
-              ownScreen &&
-              <ReactPlayer 
-                    playing={true}
-                    muted={true}
-                    url={ownScreen}
-              />  
-            ) 
-        : 
-            (
-              screenshare && remoteStream &&
-              <ReactPlayer
-                playing={true}
-                muted={true}
-                url={remoteStream}
-              /> 
-              )
-        }
-      </div>
+          <div className=" z-30 mx-auto h-[100%]">
+            {board && <WhiteBoard />}
+          </div>
 
-      <div className=" z-30 mx-auto h-[100%]">{board && <WhiteBoard/>}</div>
+          <div className="h-[100%] w-[100%] z-30">{code && <Ide />}</div>
 
-      <div className="h-[100%] w-[100%] z-30">{code && <Ide/>}</div>
-
-      <div className="text-3xl font-bold text-white absolute" >{start || calldone ? "Connected" : remoteSocketId ? "Someone has joined" : "No one in room"}</div>
-
-      </div>
+          <div className="text-3xl font-bold text-white absolute">
+            {start || calldone
+              ? "Connected"
+              : remoteSocketId
+              ? "Someone has joined"
+              : "No one in room"}
+          </div>
+        </div>
         <div className=" w-[22%] h-[100%] z-10 flex flex-col justify-between bg-slate-400 overflow-hidden">
+          <div className=" w-full h-[30%] border-4 border-black bg-white flex items-center justify-center overflow-hidden">
+            {(!remotevedio || !remoteStream) && (
+              <div className=" bg-black text-white object-cover w-[21.1%] h-[24.6%] border-black border-2 flex justify-center items-center text-7xl absolute ">
+                <FaUser />
+              </div>
+            )}
 
-        <div className=" w-full h-[30%] border-4 border-black bg-white flex items-center justify-center overflow-hidden">
-        { (!remotevedio || !remoteStream) &&
-          <div className=" bg-black text-white object-cover w-[21.1%] h-[24.6%] border-black border-2 flex justify-center items-center text-7xl absolute "><FaUser/></div>
-        }
-       
-        { !youPresent && screenshare ? (<div className=" text-xl font-bold">Presenting</div>) : (remoteStream &&
-            <>
-              <ReactPlayer
-                playing={true}
-                muted={remoteaudio}
-                url={remoteStream}
-              />
-            </>)
-          }
-        </div>
-        <div className=" h-[70%] overflow-x-hidde ">
-        <Chat/>
-        </div>
-
+            {!youPresent && screenshare ? (
+              <div className=" text-xl font-bold">Presenting</div>
+            ) : (
+              remoteStream && (
+                <>
+                  <ReactPlayer
+                    playing={true}
+                    muted={remoteaudio}
+                    url={remoteStream}
+                  />
+                </>
+              )
+            )}
+          </div>
+          <div className=" h-[70%] overflow-x-hidde ">
+            <Chat />
+          </div>
         </div>
       </div>
 
       <div className=" flex mt-6 w-full justify-center items-center bg-slate-700">
-
         <div className=" overflow-hidden rounded-full flex justify-center bg-white items-center h-[5rem] w-[5rem]">
-        <div className=" flex justify-center items-center h-[7rem] w-[7rem]">
-        {myStream && vedio ? (
-        <>
-          <ReactPlayer
-            playing={true}
-            muted={true}
-            height="7rem"
-            width="7rem"
-            url={myStream}
-          />
-        </>
-        ) : (<div className=" text-3xl"><FaUser/></div>)}
+          <div className=" flex justify-center items-center h-[7rem] w-[7rem]">
+            {myStream && vedio ? (
+              <>
+                <ReactPlayer
+                  playing={true}
+                  muted={true}
+                  height="7rem"
+                  width="7rem"
+                  url={myStream}
+                />
+              </>
+            ) : (
+              <div className=" text-3xl">
+                <FaUser />
+              </div>
+            )}
+          </div>
         </div>
-        </div>
 
-        {vedio ?
-        <button className="text-white ml-10 bg-red-500 rounded-full text-2xl p-3" onClick={handelVedio}><HiOutlineVideoCameraSlash/></button> 
-        : 
-        <button className="text-white ml-10 bg-gray-800 rounded-full text-2xl p-3" onClick={handelVedio}><HiOutlineVideoCamera/></button>
-        }
+        {vedio ? (
+          <button
+            className="text-white ml-10 bg-red-500 rounded-full text-2xl p-3"
+            onClick={handelVedio}
+          >
+            <HiOutlineVideoCameraSlash />
+          </button>
+        ) : (
+          <button
+            className="text-white ml-10 bg-gray-800 rounded-full text-2xl p-3"
+            onClick={handelVedio}
+          >
+            <HiOutlineVideoCamera />
+          </button>
+        )}
 
-        {!audio ?
-        <button className="text-white ml-10 bg-red-500 rounded-full text-2xl p-3" onClick={handelAudio}><IoMdMicOff/></button> 
-        : 
-        <button className="text-white ml-10 bg-gray-800 rounded-full text-2xl p-3" onClick={handelAudio}><IoMdMic/></button>
-        }
+        {!audio ? (
+          <button
+            className="text-white ml-10 bg-red-500 rounded-full text-2xl p-3"
+            onClick={handelAudio}
+          >
+            <IoMdMicOff />
+          </button>
+        ) : (
+          <button
+            className="text-white ml-10 bg-gray-800 rounded-full text-2xl p-3"
+            onClick={handelAudio}
+          >
+            <IoMdMic />
+          </button>
+        )}
 
-        {screenshare ?
-        <button className="text-white ml-10 bg-red-500 rounded-full text-2xl p-3" onClick={handleScreenShareOff} ><LuScreenShareOff/></button> 
-        : 
-        <button className="text-white ml-10 bg-gray-800 rounded-full text-2xl p-3" onClick={handleScreenShareOn} ><LuScreenShare/></button>
-        }
+        {screenshare ? (
+          <button
+            className="text-white ml-10 bg-red-500 rounded-full text-2xl p-3"
+            onClick={handleScreenShareOff}
+          >
+            <LuScreenShareOff />
+          </button>
+        ) : (
+          <button
+            className="text-white ml-10 bg-gray-800 rounded-full text-2xl p-3"
+            onClick={handleScreenShareOn}
+          >
+            <LuScreenShare />
+          </button>
+        )}
 
-        {board ?
-        <button className="text-white ml-10 bg-red-500 rounded-full text-2xl p-3"
-          onClick={() => {
-            if (screenshare) {
-              alert("Screen Sharing need to be Off");
-            } else {
-              handlewhiteboardOff();
-            }
-          }}
-         ><TbChalkboardOff/></button> 
-        : 
-        <button className="text-white ml-10 bg-gray-800 rounded-full text-2xl p-3"
-         onClick={() => {
-            if (screenshare) {
-              alert("Screen Sharing need to be Off");
-            } else {
-              handlewhiteboardOn();
-            }
-          }}
-         ><TbChalkboard/></button>
-        }
+        {board ? (
+          <button
+            className="text-white ml-10 bg-red-500 rounded-full text-2xl p-3"
+            onClick={() => {
+              if (screenshare) {
+                alert("Screen Sharing need to be Off");
+              } else {
+                handlewhiteboardOff();
+              }
+            }}
+          >
+            <TbChalkboardOff />
+          </button>
+        ) : (
+          <button
+            className="text-white ml-10 bg-gray-800 rounded-full text-2xl p-3"
+            onClick={() => {
+              if (screenshare) {
+                alert("Screen Sharing need to be Off");
+              } else {
+                handlewhiteboardOn();
+              }
+            }}
+          >
+            <TbChalkboard />
+          </button>
+        )}
 
-        {code ?
-        <button className="text-white ml-10 bg-red-500 rounded-full text-2xl p-3"
-         onClick={() => {
-            if (screenshare) {
-              alert("Screen Sharing need to be Off");
-            } else {
-              handlecodeeditorOff();
-            }
-          }}
-         ><TbCodeOff/></button> 
-        : 
-        <button className="text-white ml-10 bg-gray-800 rounded-full text-2xl p-3"
-         onClick={() => {
-            if (screenshare) {
-              alert("Screen Sharing need to be Off");
-            } else {
-              handlecodeeditorOn();
-            }
-          }}
-         ><TbCode/></button>
-        }
+        {code ? (
+          <button
+            className="text-white ml-10 bg-red-500 rounded-full text-2xl p-3"
+            onClick={() => {
+              if (screenshare) {
+                alert("Screen Sharing need to be Off");
+              } else {
+                handlecodeeditorOff();
+              }
+            }}
+          >
+            <TbCodeOff />
+          </button>
+        ) : (
+          <button
+            className="text-white ml-10 bg-gray-800 rounded-full text-2xl p-3"
+            onClick={() => {
+              if (screenshare) {
+                alert("Screen Sharing need to be Off");
+              } else {
+                handlecodeeditorOn();
+              }
+            }}
+          >
+            <TbCode />
+          </button>
+        )}
 
-        {isFullscreen ?
-        <button className="text-white ml-10 bg-red-500 rounded-full text-2xl p-3" onClick={toggleFullscreen} ><RiFullscreenExitFill/></button> 
-        : 
-        <button className="text-white ml-10 bg-gray-800 rounded-full text-2xl p-3" onClick={toggleFullscreen} ><RiFullscreenFill/></button>
-        }
+        {isFullscreen ? (
+          <button
+            className="text-white ml-10 bg-red-500 rounded-full text-2xl p-3"
+            onClick={toggleFullscreen}
+          >
+            <RiFullscreenExitFill />
+          </button>
+        ) : (
+          <button
+            className="text-white ml-10 bg-gray-800 rounded-full text-2xl p-3"
+            onClick={toggleFullscreen}
+          >
+            <RiFullscreenFill />
+          </button>
+        )}
 
-        {
-          remoteSocketId == null && 
-          <button onClick={handlecallexit} button className=" text-white ml-10 bg-red-400 text-2xl rounded-full p-4"><IoExitOutline/></button>
-        }
-        
-       {!start && myStream && !roomCreator && <button className=" text-white ml-10 bg-green-400 text-2xl rounded-full p-4" onClick={sendStreams}><LuPhoneCall/></button>}
-       { start && !roomCreator && <button className="text-white ml-10 bg-red-400 rounded-full text-2xl p-4"onClick={handlecallend}><SlCallEnd/></button>}
-       {!calldone && remoteSocketId && roomCreator && <button className="text-white ml-10 bg-green-400 text-2xl rounded-full p-4" onClick={handleCallUser}><LuPhoneCall/></button>}
-       { calldone && <button className="text-white ml-10 bg-red-400 rounded-full text-2xl p-4" onClick={handlecallend}><SlCallEnd/></button>}
+        {remoteSocketId == null && (
+          <button
+            onClick={handlecallexit}
+            button
+            className=" text-white ml-10 bg-red-400 text-2xl rounded-full p-4"
+          >
+            <IoExitOutline />
+          </button>
+        )}
 
+        {!start && myStream && !roomCreator && (
+          <button
+            className=" text-white ml-10 bg-green-400 text-2xl rounded-full p-4"
+            onClick={sendStreams}
+          >
+            <LuPhoneCall />
+          </button>
+        )}
+        {start && !roomCreator && (
+          <button
+            className="text-white ml-10 bg-red-400 rounded-full text-2xl p-4"
+            onClick={handlecallend}
+          >
+            <SlCallEnd />
+          </button>
+        )}
+        {!calldone && remoteSocketId && roomCreator && (
+          <button
+            className="text-white ml-10 bg-green-400 text-2xl rounded-full p-4"
+            onClick={handleCallUser}
+          >
+            <LuPhoneCall />
+          </button>
+        )}
+        {calldone && (
+          <button
+            className="text-white ml-10 bg-red-400 rounded-full text-2xl p-4"
+            onClick={handlecallend}
+          >
+            <SlCallEnd />
+          </button>
+        )}
       </div>
     </div>
   );
-};
+}
 
 export default PageComp;
